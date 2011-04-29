@@ -121,7 +121,9 @@
         snippetFileUrl = [snippetFileUrl URLByAppendingPathComponent:name];
         snippetFileUrl = [snippetFileUrl URLByAppendingPathExtension:@"codesnippet"];
         
-        [snippetData writeToURL:snippetFileUrl atomically:YES];
+        if (![snippetData writeToURL:snippetFileUrl atomically:YES]) {
+            NSLog(@"Failed to write data at url: %@", snippetFileUrl);
+        }
         
         [snippetPlist addObject:snippetItem];
         [snippetItem release];
