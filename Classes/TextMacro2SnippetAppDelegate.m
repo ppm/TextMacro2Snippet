@@ -86,11 +86,17 @@
         [snippetItem setObject:@"Xcode.SourceCodeLanguage.Objective-C" forKey:@"IDECodeSnippetLanguage"];
         
         id value;
+        NSString* name;
         
         value = [item objectForKey:@"Name"];
         if (value) {
             [snippetItem setObject:value forKey:@"IDECodeSnippetTitle"];
         }
+#if 0   // Use uuid
+        name = PPUUIDString();
+#else   // Use name if available
+        name = (value ?: PPUUIDString());
+#endif
         
         value = [item objectForKey:@"CompletionPrefix"];
         if (value) {
@@ -109,10 +115,10 @@
         
         NSData* snippetData;
         snippetData = [NSPropertyListSerialization dataWithPropertyList:snippetItem format:NSPropertyListXMLFormat_v1_0 options:0 error:NULL];
-        
+    
         NSURL* snippetFileUrl;
         snippetFileUrl = snippetFolderUrl;
-        snippetFileUrl = [snippetFileUrl URLByAppendingPathComponent:PPUUIDString()];
+        snippetFileUrl = [snippetFileUrl URLByAppendingPathComponent:name];
         snippetFileUrl = [snippetFileUrl URLByAppendingPathExtension:@"codesnippet"];
         
         [snippetData writeToURL:snippetFileUrl atomically:YES];
